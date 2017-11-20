@@ -1,4 +1,3 @@
-#
 # Copyright (C) 2017 The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,20 +11,17 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
-
-ifeq ($(TARGET_INIT_VENDOR_LIB),libinit_sec)
 
 LOCAL_PATH := $(call my-dir)
-LIBINIT_SEC_PATH := $(call my-dir)
-
 include $(CLEAR_VARS)
-LOCAL_MODULE_TAGS := optional
-LOCAL_C_INCLUDES := system/core/init
-LOCAL_CFLAGS := -Wall -DANDROID_TARGET=\"$(TARGET_BOARD_PLATFORM)\"
-LOCAL_STATIC_LIBRARIES := libbase liblog
-LOCAL_SRC_FILES := init_sec.cpp
-LOCAL_MODULE := libinit_sec
-include $(BUILD_STATIC_LIBRARY)
 
-endif
+LOCAL_SRC_FILES := \
+    libandroid_runtime.c
+
+LOCAL_SHARED_LIBRARIES := liblog
+
+LOCAL_MODULE := libandroid_runtime_shim
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_CLASS := SHARED_LIBRARIES
+
+include $(BUILD_SHARED_LIBRARY)

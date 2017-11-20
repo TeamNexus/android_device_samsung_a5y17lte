@@ -18,26 +18,6 @@ LOCAL_PATH := device/samsung/a5y17lte
 
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
-# Flat device tree for boot image
-#PRODUCT_PACKAGES += \
-#    dtbhtoolExynos
-
-# Ramdisk
-PRODUCT_PACKAGES += \
-    fstab.samsungexynos7880 \
-    init.baseband.rc \
-    init.rilchip.rc \
-    init.power.rc \
-    init.samsung.rc \
-    init.samsungexynos7880.rc \
-    init.samsungexynos7880.usb.rc \
-    init.wifi.rc \
-    ueventd.samsungexynos7880.rc
-
-# cpboot-daemon
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/ramdisk/cbd:root/sbin/cbd
-
 # Permissions
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.audio.low_latency.xml:system/etc/permissions/android.hardware.audio.low_latency.xml \
@@ -76,6 +56,44 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/com.nxp.mifare.xml:system/etc/permissions/com.nxp.mifare.xml \
     frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml
 
+
+
+# Audio
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/audio/audio_policy.conf:system/etc/audio_policy.conf \
+    $(LOCAL_PATH)/configs/audio/mixer_gains.xml:system/etc/mixer_gains.xml \
+    $(LOCAL_PATH)/configs/audio/mixer_paths.xml:system/etc/mixer_paths.xml \
+    $(LOCAL_PATH)/configs/audio/mixer_paths_0.xml:system/etc/mixer_paths_0.xml
+
+PRODUCT_PACKAGES += \
+    audio.primary.universal7880_32 \
+    audio.a2dp.default \
+    audio.usb.default \
+    audio.r_submix.default \
+    libtfa98xx_32 \
+    libtinycompress \
+    android.hardware.audio@2.0-impl \
+    android.hardware.audio.effect@-impl
+
+#BlueTooth
+PRODUCT_PACKAGES += \
+    android.hardware.bluetooth@1.0-impl
+
+# cpboot-daemon
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/ramdisk/cbd:root/sbin/cbd
+
+# Fingerprint
+PRODUCT_PACKAGES += \
+    fingerprint.exynos5 \
+    libbauthtzcommon_shim \
+    android.hardware.biometrics.fingerprint@2.1-service
+
+# GPS
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/gps/gps.cfg:system/etc/gps.cfg \
+    $(LOCAL_PATH)/configs/gps/gps.conf:system/etc/gps.conf \
+
 # Graphics
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
@@ -83,15 +101,75 @@ PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 PRODUCT_AAPT_PREBUILT_DPI := xxhdpi xhdpi hdpi
 
 PRODUCT_PACKAGES += \
-    gralloc.exynos5
+    libhwc2on1adapter \
+    android.hardware.graphics.allocator@2.0-impl \
+    android.hardware.graphics.allocator@2.0-service \
+    android.hardware.graphics.composer@2.1-impl \
+    android.hardware.graphics.mapper@2.0-impl
 
+#RenderScript Hal
 PRODUCT_PACKAGES += \
-    libion \
-    libfimg
+    android.hardware.renderscript@1.0-impl
 
+#DRM
+PRODUCT_PACKAGES += \
+    android.hardware.drm@1.0-impl
+
+# IPv6
+PRODUCT_PACKAGES += \
+    ebtables \
+    ethertypes \
+    libebtc
+
+# Keys
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/keylayout/gpio-keys.kl:/system/usr/keylayout/gpio-keys.kl \
+    $(LOCAL_PATH)/configs/keylayout/sec_touchkey.kl:/system/usr/keylayout/sec_touchkey.kl
+
+# Lights
+PRODUCT_PACKAGES += \
+    lights.universal7880
+
+#MDNIE
 # hardware/samsung/AdvancedDisplay (MDNIE)
+#PRODUCT_PACKAGES += \
+#    AdvancedDisplay
+
+
+# Media
+PRODUCT_COPY_FILES += \
+    frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
+    frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
+    frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml  \
+    $(LOCAL_PATH)/configs/media/media_codecs.xml:system/etc/media_codecs.xml \
+    $(LOCAL_PATH)/configs/media/media_profiles.xml:system/etc/media_profiles.xml
+
+#Memory
 PRODUCT_PACKAGES += \
-    AdvancedDisplay
+    android.hardware.memtrack@1.0-impl
+
+# NFC
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/nfc/libnfc-sec-hal.conf:system/etc/libnfc-sec-hal.conf \
+    $(LOCAL_PATH)/configs/nfc/libnfc-sec.conf:system/etc/libnfc-brcm.conf \
+    $(LOCAL_PATH)/configs/nfc/nfcee_access.xml:system/etc/nfcee_access.xml
+
+PRODUCT_PACKAGES += \
+    com.android.nfc_extras \
+    NfcNci \
+    Tag \
+    com.android.nfc_extras \
+    android.hardware.nfc@1.0-impl
+
+# Offmode charger
+PRODUCT_PACKAGES += \
+    charger_res_images \
+    cm_charger_res_images
+
+# Power
+PRODUCT_PACKAGES += \
+    power.universal7880 \
+    android.hardware.power@1.0-impl
 
 # Radio
 PRODUCT_PACKAGES += \
@@ -106,11 +184,28 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     SamsungServiceMode
 
-# IPv6
+# Ramdisk
 PRODUCT_PACKAGES += \
-    ebtables \
-    ethertypes \
-    libebtc
+    fstab.samsungexynos7880 \
+    init.baseband.rc \
+    init.rilchip.rc \
+    init.power.rc \
+    init.samsung.rc \
+    init.samsungexynos7880.rc \
+    init.samsungexynos7880.usb.rc \
+    init.wifi.rc \
+    ueventd.samsungexynos7880.rc
+
+#Sensors
+PRODUCT_PACKAGES += \
+    android.hardware.sensors@1.0-impl
+
+# Touchscreen
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/idc/ft5x06_ts.idc:system/usr/idc/ft5x06_ts.idc \
+    $(LOCAL_PATH)/configs/idc/Synaptics_HID_TouchPad.idc:system/usr/idc/Synaptics_HID_TouchPad.idc \
+    $(LOCAL_PATH)/configs/idc/Synaptics_RMI4_TouchPad_Sensor.idc:system/usr/idc/Synaptics_RMI4_TouchPad_Sensor.idc \
+    $(LOCAL_PATH)/configs/idc/sec_touchscreen.idc:system/usr/idc/sec_touchscreen.idc
 
 # WCNSS
 PRODUCT_COPY_FILES += \
@@ -130,77 +225,8 @@ PRODUCT_PACKAGES += \
     libwpa_client \
     wifiloader \
     wpa_supplicant \
-    wpa_supplicant.conf
-
-# NFC
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/nfc/libnfc-sec-hal.conf:system/etc/libnfc-sec-hal.conf \
-    $(LOCAL_PATH)/configs/nfc/libnfc-sec.conf:system/etc/libnfc-brcm.conf \
-    $(LOCAL_PATH)/configs/nfc/nfcee_access.xml:system/etc/nfcee_access.xml
-
-PRODUCT_PACKAGES += \
-    com.android.nfc_extras \
-    NfcNci \
-    Tag
-
-# Audio
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/audio/audio_policy.conf:system/etc/audio_policy.conf \
-    $(LOCAL_PATH)/configs/audio/mixer_gains.xml:system/etc/mixer_gains.xml \
-    $(LOCAL_PATH)/configs/audio/mixer_paths.xml:system/etc/mixer_paths.xml \
-    $(LOCAL_PATH)/configs/audio/mixer_paths_0.xml:system/etc/mixer_paths_0.xml
-
-PRODUCT_PACKAGES += \
-    audio.primary.universal7880_32 \
-    audio.a2dp.default \
-    audio.usb.default \
-    audio.r_submix.default \
-    libtfa98xx_32 \
-    libtinycompress
-
-# Media
-PRODUCT_COPY_FILES += \
-    frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
-    frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
-    frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml  \
-    $(LOCAL_PATH)/configs/media/media_codecs.xml:system/etc/media_codecs.xml \
-    $(LOCAL_PATH)/configs/media/media_profiles.xml:system/etc/media_profiles.xml
-
-# GPS
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/gps/gps.cfg:system/etc/gps.cfg \
-    $(LOCAL_PATH)/configs/gps/gps.conf:system/etc/gps.conf \
-
-# Keys
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/keylayout/gpio-keys.kl:/system/usr/keylayout/gpio-keys.kl \
-    $(LOCAL_PATH)/configs/keylayout/sec_touchkey.kl:/system/usr/keylayout/sec_touchkey.kl
-
-# Touchscreen
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/idc/ft5x06_ts.idc:system/usr/idc/ft5x06_ts.idc \
-    $(LOCAL_PATH)/configs/idc/Synaptics_HID_TouchPad.idc:system/usr/idc/Synaptics_HID_TouchPad.idc \
-    $(LOCAL_PATH)/configs/idc/Synaptics_RMI4_TouchPad_Sensor.idc:system/usr/idc/Synaptics_RMI4_TouchPad_Sensor.idc \
-    $(LOCAL_PATH)/configs/idc/sec_touchscreen.idc:system/usr/idc/sec_touchscreen.idc
-
-# Power
-PRODUCT_PACKAGES += \
-    power.universal7880
-
-# Lights
-PRODUCT_PACKAGES += \
-    lights.universal7880
-
-# Fingerprint
-PRODUCT_PACKAGES += \
-    fingerprintd \
-    fingerprint.exynos5 \
-    libbauthtzcommon_shim
-
-# Offmode charger
-PRODUCT_PACKAGES += \
-    charger_res_images \
-    cm_charger_res_images
+    wpa_supplicant.conf \
+    android-hardware.wifi@1.0-service
 
 
 # call Samsung LSI board support package
